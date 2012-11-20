@@ -33,10 +33,10 @@ public class AddressBook {
 
 	private void addContact(Contact c) throws IOException {
 
-		if (search(c.getName()) != null) {
-			System.out.println("Contact " + c.getName() + " already exists.");
-			return;
-		}
+//		if (search(c.getName()) != null) {
+//			System.out.println("Contact " + c.getName() + " already exists.");
+//			return;
+//		}
 
 		PrintWriter out = null;
 		try {
@@ -77,8 +77,6 @@ public class AddressBook {
 					reader.close();
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 
@@ -95,18 +93,20 @@ public class AddressBook {
 		return null;
 	}
 
-	public boolean delete(String name) throws IOException {
-
-		Contact toDelete = search(name);
-
-		if (toDelete == null) {
-
-			System.out.println("No contact with name " + name + " found.");
-			return false;
+	public void delete (String name) throws IOException {
+		Contact c = search(name);
+		if ( c == null) {
+			return;
 		}
+		delete(c);
+	}
+	
+	private void delete(Contact c) throws IOException {
+		contacts.remove(c);
+		updateFile();
+	}
 
-		contacts.remove(toDelete);
-
+	private void updateFile() throws IOException {
 		PrintWriter out = null;
 
 		try {
@@ -122,10 +122,9 @@ public class AddressBook {
 				out.close();
 			}
 		}
-
-		return true;
+		
 	}
-
+	
 	public void printBook() {
 
 		if (contacts.size() == 0) {
